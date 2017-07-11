@@ -9,9 +9,13 @@ import android.widget.EditText;
 public class CreateContactAcitivity extends Activity {
 
     private Button submitButton;
-    private EditText nameField, emailField;
+    private EditText numberField, nameField, primaryField, addressField, provinceField;
     private MyApplicationData appState;
 
+    /**
+     * Initialization method that runs when the activity's intent is invoked.
+     * @param savedInstanceState The saved instance state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,18 +24,30 @@ public class CreateContactAcitivity extends Activity {
         appState = ((MyApplicationData) getApplicationContext());
 
         submitButton = (Button) findViewById(R.id.submitButton);
-        nameField = (EditText) findViewById(R.id.name);
-        emailField = (EditText) findViewById(R.id.email);
+        numberField = (EditText) findViewById(R.id.txtNumber);
+        nameField = (EditText) findViewById(R.id.txtName);
+        primaryField = (EditText) findViewById(R.id.txtPrimary);
+        addressField = (EditText) findViewById(R.id.txtAddress);
+        provinceField = (EditText) findViewById(R.id.txtProvince);
     }
 
+    /**
+     * Submits the information provided in the text fields to a firebase object.
+     * @param v The view of the item.
+     */
     public void submitInfoButton(View v) {
         //each entry needs a unique ID
-        String personID = appState.firebaseReference.push().getKey();
-        String name = nameField.getText().toString();
-        String email = emailField.getText().toString();
-        Contact person = new Contact(personID, name, email);
+        String businessID = appState.firebaseReference.push().getKey();
+        Business business = new Business(
+                businessID,
+                numberField.getText().toString(),
+                nameField.getText().toString(),
+                primaryField.getText().toString(),
+                addressField.getText().toString(),
+                provinceField.getText().toString()
+        );
 
-        appState.firebaseReference.child(personID).setValue(person);
+        appState.firebaseReference.child(businessID).setValue(business);
 
         finish();
 
